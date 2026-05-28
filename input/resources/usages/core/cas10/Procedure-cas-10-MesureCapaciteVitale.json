@@ -6,7 +6,7 @@
       },
       "status" : "completed",
       "code" : {
-        "coding" : [{"system" : "http://hl7.org/fhir/sid/ccam",
+        "coding" : [{"system" : "https://interop.aphp.fr/ig/fhir/dm/CodeSystem/Ccam",
           "code" : "GLQP008",
          "display" : "Mesure de la capacite vitale lente et de l'expiration forcee, avec gazometrie sanguine arterielle [Spirometrie standard avec gaz du sang]"
         }]

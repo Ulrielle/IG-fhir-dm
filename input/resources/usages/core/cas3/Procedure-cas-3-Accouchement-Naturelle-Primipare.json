@@ -6,7 +6,7 @@
       },
       "status" : "completed",
       "code" : {
-        "coding" : [{ "system" : "http://hl7.org/fhir/sid/ccam",
+        "coding" : [{ "system" : "https://interop.aphp.fr/ig/fhir/dm/CodeSystem/Ccam",
           "code" : "JQGD010",
           "display" : "Accouchement cephalique unique par voie naturelle, chez une primipare"
         }]

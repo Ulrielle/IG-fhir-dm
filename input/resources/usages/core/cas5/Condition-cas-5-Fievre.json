@@ -8,7 +8,7 @@
         "coding" : [{
           "system" : "https://interop.aphp.fr/ig/fhir/dm/CodeSystem/pmsi-mco-diag-type",
           "code" : "DP",
-          "display" : "Diagnostic associe"
+          "display" : "Diagnostic Principal"
         }]
       }],
       "code" : {
