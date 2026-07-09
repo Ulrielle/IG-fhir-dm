@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Encounter, cette vue alimente la table OMOP `visit_detail`. 
 Elle contient la référence vers le patient et vers le séjour, ainsi que les dates de début et de fin du détail de séjour. 
@@ -30,3 +25,4 @@ Dans la version actuelle, le détail du séjour n'est pas distingué du séjour 
 | discharged_to_concept_id | Destination du patient à la sortie, codée selon le référentiel standard OMOP |
 | discharged_to_source_value | Destination telle que libellée dans la source |
 | discharged_to_source_concept_id | Code source de la destination |
+{: .grid}

@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource MedicationAdministration, qui représente une administration effective de médicament, cette vue alimente elle aussi la table OMOP `drug_exposure`. 
 Elle contient la référence vers le patient et vers le séjour concernés, le médicament réellement administré, la période réelle, la voie et la dose. 
@@ -29,3 +24,4 @@ L'origine de la donnée est ici tracée par une constante différente (38000180)
 | route_coding_source_system | Système de codage du code source |
 | quantity | Dose administrée |
 | dose_unit_source_value | Unité de la dose, telle que libellée dans la source |
+{: .grid}

@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Condition, qui représente un diagnostic, cette vue alimente la table OMOP condition_occurrence. 
 Elle contient la référence vers le patient et vers le séjour concernés, la date d'enregistrement du diagnostic, ainsi que son statut (principal ou associé), obtenu par un calcul qui multiplie chaque concept_id candidat par 1 si la modalité correspondante est vérifiée, et par 0 sinon, de sorte que seul le concept_id correspondant à la modalité réellement présente apparaît dans le résultat. 
@@ -25,3 +20,4 @@ Extraits de la même ressource Condition, ils sont pris en charge par une viewde
 | condition_type_concept_id | Origine de l'enregistrement de la donnée |
 | condition_status_concept_id | Statut du diagnostic (principal ou associé), codé selon le référentiel standard OMOP |
 | condition_status_source_value | Statut du diagnostic tel que libellé dans la source |
+{: .grid}

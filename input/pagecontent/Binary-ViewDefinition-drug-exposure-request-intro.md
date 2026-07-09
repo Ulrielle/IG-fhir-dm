@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource MedicationRequest, qui représente une prescription médicamenteuse, cette vue alimente la table OMOP `drug_exposure`. 
 Elle contient la référence vers le patient et vers le séjour concernés, le médicament prescrit, la période prévue de traitement, et la voie d'administration prévue. 
@@ -25,3 +20,4 @@ L'origine de la donnée, une prescription, est tracée par une constante (380001
 | route_source_value | Voie d'administration prévue, telle que libellée dans la source |
 | route_source_concept_id | Code source de la voie d'administration |
 | route_coding_source_system | Système de codage du code source |
+{: .grid}

@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Encounter, qui représente un séjour ou une prise en charge, cette vue alimente la table OMOP `visit_occurrence`. 
 Elle contient la référence vers le patient concerné, les dates de début et de fin du séjour, ainsi que le type de prise en charge (hospitalisation, consultation externe, urgences), obtenu par un calcul qui multiplie chaque concept_id candidat par 1 si la modalité correspondante est vérifiée, et par 0 sinon, de sorte que seul le concept_id correspondant à la modalité réellement présente apparaît dans le résultat. 
@@ -26,3 +21,4 @@ L'origine de cette information, est tracée par une constante (44818518) si elle
 | discharged_to_concept_id | Destination du patient à la sortie, codée selon le référentiel standard OMOP |
 | discharged_to_source_value | Destination telle que libellée dans la source |
 | discharged_to_source_concept_id | Code source de la destination |
+{: .grid}

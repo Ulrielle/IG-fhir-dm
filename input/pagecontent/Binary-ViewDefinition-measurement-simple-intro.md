@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Observation, pour les résultats ne portant qu'une seule valeur, par exemple une glycémie, cette vue alimente la table OMOP `measurement`.
 Elle contient la référence vers le patient et vers le séjour concernés, la date du résultat, sa valeur, son unité, ainsi que les bornes de normalité lorsqu'elles sont disponibles. 
@@ -27,4 +22,5 @@ Un filtre restreint cette viewdefinition aux observations qui ne comportent pas 
 | unit_source_value | Unité telle que libellée dans la source |
 | range_low | Borne basse de normalité |
 | range_high | Borne haute de normalité |
+{: .grid}
  

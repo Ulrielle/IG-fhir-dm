@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Certains éléments de la ressource Condition ne correspondent pas à un diagnostic actif mais à un antécédent médical, un style de vie ou une information administrative.
 Cette viewdefinition les extrait pour alimenter la table OMOP `observation`, distincte de la table `condition_occurrence` bien que la ressource source soit la même. 
@@ -24,3 +19,4 @@ L'origine de la donnée est tracée par une constante (38000280).
 | observation_source_concept_id | Code source de l'élément |
 | observation_coding_source_system | Système de codage du code source |
 | observation_type_concept_id | Origine de l'enregistrement de la donnée |
+{: .grid}

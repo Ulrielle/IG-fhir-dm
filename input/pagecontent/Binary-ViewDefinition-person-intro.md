@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Patient, cette vue alimente la table OMOP `person`. 
 Elle contient l'identifiant du patient, sa date de naissance, ainsi que son sexe traduit vers les codes standards attendus par OMOP. 
@@ -18,3 +13,4 @@ Cette traduction repose sur un calcul qui multiplie chaque concept_id candidat p
 | day_of_birth | Jour de naissance |
 | location_id | Référence vers le lieu de résidence du patient |
 | gender_source_value | Sexe tel qu'enregistré dans la source FHIR |
+{: .grid}

@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Observation, pour les résultats qui rassemblent plusieurs mesures liées (par exemple une pression artérielle associant une valeur systolique et une valeur diastolique), cette viewdefinition alimente elle aussi la table OMOP `measurement`. 
 Elle contient la référence vers le patient et vers le séjour concernés, ainsi que la date du résultat. 
@@ -26,3 +21,4 @@ Un filtre restreint cette vue aux observations qui comportent effectivement plus
 | value_as_number | Valeur numérique du composant |
 | unit_concept_id | Unité de mesure, codée |
 | unit_source_value | Unité telle que libellée dans la source |
+{: .grid}

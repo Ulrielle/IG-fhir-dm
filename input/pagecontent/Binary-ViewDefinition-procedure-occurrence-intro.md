@@ -1,8 +1,3 @@
-<style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; font-weight: bold; }
-</style>
 
 Construite à partir de la ressource Procedure, qui représente un acte réalisé, cette vue alimente la table OMOP `procedure_occurrence`. 
 Elle contient la référence vers le patient et vers le séjour concernés, la date et la nature de l'acte. 
@@ -22,3 +17,4 @@ L'origine de la donnée est tracée par une constante (38000275).
 | procedure_source_concept_id | Code source de l'acte |
 | procedure_coding_source_system | Système de codage du code source |
 | procedure_type_concept_id | Origine de l'enregistrement de la donnée |
+{: .grid}
