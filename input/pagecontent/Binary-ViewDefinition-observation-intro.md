@@ -1,13 +1,13 @@
 
 Certains éléments de la ressource **`Condition`** ne correspondent pas à un diagnostic actif mais à un antécédent médical, un style de vie ou une information administrative.
 
-Cette viewdefinition extrait les antécédents médicaux et prépare les données en vue de leur chargement dans la table OMOP **`observation`**, distincte de la table **`condition_occurrence`** bien que la ressource source soit la même.
+Cette ViewDefinition extrait les antécédents médicaux et prépare les données en vue de leur chargement dans la table OMOP **`observation`**, distincte de la table **`condition_occurrence`** bien que la ressource source soit la même.
 
 Elle contient la référence vers le `patient` et vers le `séjour` concernés, ainsi que la `date d'enregistrement`.
 
 Un filtre retient les codes correspondant à un antécédent médical.
 
-Le code **n'est pas encore rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
+Le code **n'est pas rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
 
 L'origine de la donnée est tracée par une constante (`38000280`).
 

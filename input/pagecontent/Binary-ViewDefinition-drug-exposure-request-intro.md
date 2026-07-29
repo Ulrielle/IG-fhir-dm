@@ -3,7 +3,7 @@ Construite à partir de la ressource **`MedicationRequest`**, qui représente un
 
 Elle contient la référence vers le `patient` et vers le `séjour` concernés, le `médicament` prescrit, la `période` prévue de traitement, et la `voie` d'administration prévue.
 
-Le médicament **n'est pas encore rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
+Le médicament **n'est pas rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
 
 L'origine de la donnée, une prescription, est tracée par une constante (`38000177`).
 

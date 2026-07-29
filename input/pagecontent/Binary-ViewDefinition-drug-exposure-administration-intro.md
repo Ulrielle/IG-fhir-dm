@@ -3,7 +3,7 @@ Construite à partir de la ressource **`MedicationAdministration`**, qui représ
 
 Elle contient la référence vers le `patient` et vers le `séjour` concernés, le `médicament` réellement administré, la `période` réelle, la `voie` et la `dose`.
 
-Le médicament **n'est pas encore rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
+Le médicament **n'est pas rattaché** à un concept standard (colonne à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
 
 L'origine de la donnée est ici tracée par une constante différente de celle de la prescription (`38000180`).
 

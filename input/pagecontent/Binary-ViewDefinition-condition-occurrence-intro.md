@@ -3,11 +3,13 @@ Construite à partir de la ressource **`Condition`**, cette vue prépare et stru
 
 Elle contient la référence vers le `patient` et vers le `séjour` concernés, la `date d'enregistrement` du diagnostic, ainsi que son `statut` (principal ou associé). Un calcul détermine le `concept_id` correspondant au statut : il multiplie chaque `concept_id` candidat par 1 si la modalité correspondante est vérifiée, et par 0 sinon, de sorte que seul le `concept_id` correspondant à la modalité réellement présente apparaît dans le résultat.
 
-Le diagnostic **n'est pas encore rattaché** à un concept standard OMOP (la colonne correspondante est laissée à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
+Le diagnostic **n'est pas rattaché** à un concept standard OMOP (la colonne correspondante est laissée à 0), mais le code d'origine reste disponible dans une colonne source dédiée.
 
 L'origine de la donnée est tracée par une constante (`32817`).
 
-Certains codes ne correspondant pas à un diagnostic actif (antécédents médicaux, style de vie ou informations administratives) sont volontairement exclus de cette vue par un filtre. Ils sont pris en charge par une viewdefinition distincte, destinée à la table **`observation`**.
+Certains codes ne correspondant pas à un diagnostic actif (antécédents médicaux, style de vie ou informations administratives): les inclure ici fausserait le contenu de la table **``condition_occurrence``** qui doit ne représenter que des diagnostics. 
+
+C'est pourquoi ils sont exclus par un filtre de cette vue, et pris en charge par une ViewDefinition distincte, destinée à la table **`observation`**.
 
 
 | Colonne | Signification métier |

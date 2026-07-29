@@ -7,7 +7,7 @@ Un calcul détermine le `concept_id` correspondant au type de séjour et aux inf
 
 L'origine de la donnée est tracée par une constante (`44818518`).
 
-Cette viewdefinition vise à apporter un niveau de détail plus fin du séjour. Dans la version actuelle, le détail du séjour **n'est pas distingué** du séjour global : la référence vers le séjour reprend le même identifiant que le détail lui-même.
+Cette ViewDefinition vise à apporter un niveau de détail plus fin du séjour. Dans la version actuelle, le détail du séjour **n'est pas distingué** du séjour global : la référence vers le séjour reprend le même identifiant que le détail lui-même.
 
 | Colonne | Signification métier |
 |---|---|
