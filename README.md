@@ -144,9 +144,9 @@ APHP — Direction des Services Numériques (Domaine MSD/DSN)
 
 > **Comment lire ce document.** Les sections 1 à 3 et 8 à 13 décrivent le pipeline, les résultats et les limites en langage courant, sans code. Les sections 4 à 7 décrivent la mise en œuvre technique (installation, import, exécution des vues) ; un seul exemple concret de règle de transformation (ViewDefinition) est montré en §7 pour illustrer le principe. Un lecteur non technique peut passer directement de §3 à §8 sans perdre le fil.
 
----
 
-### 1. Présentation
+
+#### Présentation
 
 [Pathling](https://pathling.csiro.au/) est un serveur FHIR d'analyse, construit sur Apache Spark, qui implémente le standard **SQL-on-FHIR v2**. Il permet de :
 
@@ -160,9 +160,9 @@ Dans ce projet, Pathling est utilisé pour transformer les ressources `Patient`,
 
 Objectif du projet : mesurer les écarts structurels et sémantiques entre FHIR et OMOP, identifier les contraintes techniques de la transformation, et déterminer les conditions d'industrialisation du mapping pour l'usage secondaire des données de santé.
 
----
 
-### 2. Architecture du pipeline
+
+#### Architecture du pipeline
 
 ```
 Ressources FHIR conformes (Patient, Encounter, Condition, Observation, Procedure, MedicationRequest/Administration)
@@ -188,9 +188,9 @@ Mapping Athena (concept_id restants : SNOMED, LOINC, RxNorm)
 
 Les ViewDefinitions produisent directement les tables OMOP ; WhiteRabbit et Rabbit-in-a-Hat n'interviennent pas pour transformer les données mais pour documenter et vérifier a posteriori le mapping réalisé (profilage des CSV exportés, correspondances champ par champ).
 
----
 
-### 3. Prérequis
+
+#### Prérequis
 
 Les outils suivants sont nécessaires pour faire tourner le pipeline (serveur Pathling, stockage MinIO, scripts de préparation des données). Docker et MinIO sont les seuls éléments réellement indispensables : Pathling ne peut pas fonctionner sans un endpoint S3 à interroger, et MinIO joue ce rôle localement. Java n'est nécessaire que si Pathling est utilisé comme librairie Scala/Java plutôt que comme serveur conteneurisé, ce qui n'est pas le cas dans ce projet.
 
@@ -201,12 +201,13 @@ Les outils suivants sont nécessaires pour faire tourner le pipeline (serveur Pa
 | Python 3.x | Préparation/correction des fichiers NDJSON, conversion JSON → NDJSON | ✅ |
 | curl ou Postman | Appels à l'API REST FHIR et à l'API Pathling | recommandé |
 | Java 21 | Uniquement pour usage de la librairie Pathling hors Docker | optionnel |
+{: .grid}
 
 > **Contrainte réseau APHP** : le proxy réseau APHP peut bloquer le téléchargement direct de certaines dépendances (ex. packages FHIR Implementation Guide `aphp.fhir.fr.edsh`) ou d'images Docker externes. Prévoir un build local des dépendances mises en cache dans `~/.fhir/packages/`, ou un mirroir interne / import d'image `.tar` pré-téléchargée si nécessaire.
 
----
 
-### 4. Installation de Pathling
+
+#### Installation de Pathling
 
 Configuration utilisée dans le projet : Pathling importe directement depuis un bucket MinIO (protocole S3A), sans montage de dossier local. Deux services Docker sont déployés ensemble : `pathling` (le serveur d'analyse, accessible sur le port 8080) et `minio` (le stockage objet, accessible sur les ports 9000/9001). Pathling est configuré pour n'accepter que les imports provenant du bucket `data-fhir`, et pour s'y connecter avec les identifiants MinIO définis ci-dessous.
 
@@ -253,9 +254,9 @@ docker compose up -d
 - Aucun volume n'est monté sur le service `pathling` : l'entrepôt de données (warehouse) n'est pas persistant entre deux redémarrages du conteneur dans cette configuration.
 - Une fois démarré, on vérifie que le serveur répond correctement en visitant son adresse de métadonnées (`http://localhost:8080/fhir/metadata`) dans un navigateur : une réponse JSON confirme qu'il est opérationnel.
 
----
 
-### 5. Acquisition et préparation des données sources
+
+#### Acquisition et préparation des données sources
 
 Pathling exige **une ressource FHIR par ligne**, sans indentation multi-lignes (format NDJSON). Un JSON indenté sur plusieurs lignes provoque des erreurs de parsing côté Spark. Concrètement, chaque patient, séjour, diagnostic, etc. devient une seule ligne de texte dans un fichier, une ligne par ressource.
 
@@ -265,19 +266,19 @@ Points de vigilance appliqués dans ce projet, à reproduire lors de toute nouve
 - **Champs `display` manquants** : vérifier que chaque code de catégorie possède un libellé lisible ; les corriger en amont si absents.
 - **Cohérence des systèmes de codage** : documenter les mélanges de vocabulaires (ex. ICD-10 / ICD-11) plutôt que de les corriger silencieusement, ils seront traités lors du mapping Athena.
 
----
 
-### 6. Dépôt sur MinIO et import dans Pathling
+
+#### Dépôt sur MinIO et import dans Pathling
 
 Avant le premier import, le bucket `data-fhir` est créé une seule fois dans MinIO (via sa console web, ou en ligne de commande avec le client `mc`).
 
 L'import proprement dit se fait via une opération standard du serveur FHIR (`$import`) : on lui indique le type de ressource (`Patient`, `Encounter`, etc.) et l'adresse du fichier dans le bucket MinIO (`s3a://data-fhir/Patient.ndjson`). Cette opération est répétée pour chaque type de ressource : `Encounter`, `Condition`, `Observation`, `Procedure`, `MedicationRequest`, `MedicationAdministration`. Elle peut soit remplacer les données déjà présentes pour ce type de ressource (`overwrite`), soit les compléter (`merge`).
 
----
 
-### 7. Création et exécution des vues de transformation (ViewDefinitions)
 
-#### 7.1 Principe : à quoi ressemble une ViewDefinition ?
+#### Création et exécution des vues de transformation (ViewDefinitions)
+
+##### Principe : à quoi ressemble une ViewDefinition ?
 
 Une ressource FHIR est comme une **fiche patient très détaillée**, avec des informations rangées dans des rubriques et des sous-rubriques (identité, adresse, contacts, sexe, date de naissance...). Cette fiche est bien organisée, mais elle n'est pas présentée sous forme de tableau : c'est plutôt une fiche imbriquée, avec des dossiers dans des dossiers.
 
@@ -295,11 +296,11 @@ Une ViewDefinition se compose toujours des mêmes éléments :
 
 Dans ce projet, chaque table OMOP (ou presque) correspond à une ViewDefinition : `Person` pour la table `person`, une vue dédiée pour `visit_occurrence`, etc. Une feuille de route par table à produire.
 
-#### 7.2 Exécution via l'admin UI
+##### Exécution via l'admin UI
 
 La façon la plus simple de tester une ViewDefinition est l'interface d'administration de Pathling : on colle la feuille de route dans l'onglet **SQL on FHIR**, et l'aperçu du résultat s'affiche directement, sans avoir besoin d'écrire de commande. Une API est disponible pour automatiser l'exécution de ces vues dans un pipeline.
 
-#### 7.3 Exemple commenté : de `Patient` à `person`
+##### Exemple commenté : de `Patient` à `person`
 
 Voici un exemple de ViewDefinition utilisée dans le projet pour produire la table OMOP `person` à partir de la ressource `Patient`. Chaque ligne de `column` correspond à une colonne de la future table :
 
@@ -339,6 +340,7 @@ Voici un exemple de ViewDefinition utilisée dans le projet pour produire la tab
 | `day_of_birth` | `birthDate` | Idem, en vue d'en garder le jour. |
 | `location_id` | `id` | Le même identifiant patient est réutilisé comme identifiant de localisation, pour pouvoir relier la table `person` à la table `location` plus tard. |
 | `gender_source_value` | `gender` | La valeur brute du sexe telle qu'écrite dans FHIR (`female` ou `male`), conservée à titre de traçabilité, à côté du code OMOP. |
+{: .grid}
 
 **Pourquoi `year_of_birth`, `month_of_birth` et `day_of_birth` contiennent-elles la date complète ?**
 
@@ -354,17 +356,17 @@ OMOP attend un code numérique pour le sexe (8532 pour féminin, 8507 pour mascu
 
 Comme un seul des deux interrupteurs peut être à 1 à la fois, un seul des deux codes "passe" dans le résultat final, l'autre étant multiplié par zéro. Un patient de sexe féminin donne : `1 × 8532 + 0 × 8507 = 8532`. Cette même logique (compter puis multiplier) est réutilisée dans tout le projet chaque fois qu'un code OMOP doit être déduit d'une valeur FHIR (type de séjour, mode d'entrée/sortie, type de diagnostic — voir §9, ligne `iif()`).
 
----
 
-### 8. Limite importante : pas de requête inter-ressources dans Pathling
+
+#### Limite importante : pas de requête inter-ressources dans Pathling
 
 Chaque ViewDefinition porte sur **une seule ressource FHIR à la fois**. Il est possible de compter ou de filtrer à l'intérieur d'une même ressource — par exemple le nombre de patients de sexe masculin dans `Patient`, ou une fois le mapping fait, dans la vue `person` — mais **Pathling ne permet pas de croiser deux ressources ou deux vues dans une seule opération**. Impossible donc d'obtenir directement, en une seule opération Pathling, le nombre de patients de sexe masculin atteints d'une affection donnée : cela suppose de combiner deux tables (`person` et `condition_occurrence`), ce que le serveur ne sait pas faire nativement.
 
 Concrètement, toute question qui nécessite de relier deux ressources ou deux vues doit être traitée **après export**, en SQL classique sur les CSV/NDJSON/Parquet obtenus (cf. §11 pour les cas déjà rencontrés dans ce projet : jointure `death`/cause, `UNION ALL` sur `measurement`).
 
----
 
-### 9. Fonctions FHIRPath — compatibilité Pathling
+
+#### Fonctions FHIRPath — compatibilité Pathling
 
 Toutes les fonctions FHIRPath ne sont pas supportées par Pathling. Les fonctions supportées (première partie du tableau ci-dessous) couvrent l'essentiel des besoins de navigation et de filtrage : sélectionner un élément, filtrer une collection, vérifier une présence, compter, typer une valeur ambiguë et dérouler un tableau. Les fonctions non supportées ont toutes la même origine : Pathling traduit ces expressions en requêtes Spark SQL, et certaines opérations (indexation positionnelle, sous-chaînes, hachage, conditionnelles, projections imbriquées) n'ont pas d'équivalent direct dans ce moteur — la colonne "Alternative" indique, pour chacune, le contournement retenu dans le projet. La plupart reposent sur la combinaison `where().count()`, qui elle est nativement traduisible en SQL.
 
@@ -387,9 +389,9 @@ Toutes les fonctions FHIRPath ne sont pas supportées par Pathling. Les fonction
 | Éléments primitifs étendus (`_line`, etc.) | ❌ Type `VOID` | Colonne à supprimer |
 {: .grid}
 
----
 
-### 10. Autres bugs rencontrés avec le moteur Pathling
+
+#### Autres bugs rencontrés avec le moteur Pathling
 
 Au-delà des fonctions FHIRPath non supportées (§9) et des écarts de modèle entre FHIR et OMOP (§11), deux comportements inattendus, propres au moteur d'exécution de Pathling (Spark SQL), ont été rencontrés pendant le projet. Ils ne relèvent ni d'une fonction FHIRPath manquante, ni d'une différence de modélisation entre les deux standards : ce sont des particularités internes au moteur, à connaître avant de nommer une colonne ou d'extraire une valeur numérique.
 
@@ -399,9 +401,9 @@ Au-delà des fonctions FHIRPath non supportées (§9) et des écarts de modèle 
 | Caractères corrompus sur `valueQuantity.value` | Type polymorphique `value[x]` non résolu | `valueQuantity.where($this is Quantity).value` |
 {: .grid}
 
----
 
-### 11. Écarts entre FHIR et OMOP
+
+#### Écarts entre FHIR et OMOP
 
 Certains écarts entre les deux modèles sont structurels : ils tiennent à des logiques de modélisation différentes entre FHIR (échange clinique) et OMOP (recherche observationnelle), et se retrouvent systématiquement, quelle que soit la ressource concernée. Un même principe explique la majorité des lignes ci-dessous : **FHIR autorise plusieurs valeurs ou plusieurs représentations là où OMOP impose une seule colonne typée**. C'est vrai pour les codages (tableau vs code unique), les dates (types multiples vs deux colonnes fixes) et les mesures composites (tableau de composants vs lignes séparées). Le traitement retenu suit donc systématiquement la même logique : conserver l'information FHIR sans perte immédiate (dans une colonne source, un export intermédiaire, ou une valeur dupliquée), puis résoudre l'écart soit par une règle de mapping simple, soit par un traitement SQL en aval lorsque la transformation dépasse ce qu'une seule vue peut exprimer (§8).
 
@@ -422,9 +424,9 @@ Certains écarts entre les deux modèles sont structurels : ils tiennent à des 
 | Unités | UCUM | UCUM | Identique, pas de mapping nécessaire |
 {: .grid}
 
----
 
-### 12. Tables OMOP hors périmètre du projet
+
+#### Tables OMOP hors périmètre du projet
 
 Le projet vise un ensemble précis de tables OMOP, déterminé par les 51 variables du socle de la PDS (Plateforme de Données de Snaté) : `person`, `location`, `visit_occurrence`, `visit_detail`, `condition_occurrence`, `observation`, `measurement`, `procedure_occurrence`, `drug_exposure`, `death`. Plusieurs autres tables du modèle OMOP CDM v5.4  `observation_period`, `condition_era`, `drug_era`, `dose_era`, `fact_relationship`, `device_exposure`, `note` **n'ont jamais fait partie de ce périmètre** : elles ne correspondent à aucune des 51 variables socle et n'ont donc pas été produites, ce qui n'est pas un blocage rencontré en cours de projet mais un choix de cadrage initial.
 
@@ -438,9 +440,9 @@ Le projet vise un ensemble précis de tables OMOP, déterminé par les 51 variab
 | `device_exposure`, `note` | Hors périmètre (non demandées) | Resteraient non produisibles : aucune ressource FHIR source correspondante |
 {: .grid}
 
----
 
-### 13. Ressources
+
+#### Ressources
 
 Les liens ci-dessous pointent vers la documentation officielle consultée pour rédiger ce README (serveur Pathling, opérations FHIR utilisées), ainsi que vers les standards et outils tiers mobilisés dans le pipeline (SQL-on-FHIR, OMOP CDM, Athena, WhiteRabbit, MinIO). Les liens vers les opérations Pathling sont les plus utiles au quotidien pour un usage technique : ce sont les pages de référence pour vérifier la syntaxe exacte des paramètres en cas de changement de version.
 
@@ -462,6 +464,6 @@ Les liens ci-dessous pointent vers la documentation officielle consultée pour r
 | Profils APHP/EDSH — IG EDSH socle commun | `https://interop.aphp.fr/ig/fhir/dm/` |
 {: .grid}
 
----
+
 
 *Document technique — pipeline FHIR R4 → OMOP CDM v5.4, projet APHP DSN (Domaine MSD/DSN).*
